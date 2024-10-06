@@ -1,4 +1,5 @@
 import { forwardRef, useRef, useImperativeHandle } from "react"
+import { createPortal } from 'react-dom'
 
 const ResultModal = forwardRef(function ResultModal({ timeRemaining, targetTimeInSec, onReset }, ref) {
     const dialog = useRef()
@@ -15,7 +16,7 @@ const ResultModal = forwardRef(function ResultModal({ timeRemaining, targetTimeI
         }
     })
 
-    return (
+    return createPortal(
         <dialog ref={dialog} className="result-modal">
             <h2>You {youLost ? 'lost' : 'won'}!</h2>
             {!youLost && <h2>Your score: {score}</h2>}
@@ -25,10 +26,11 @@ const ResultModal = forwardRef(function ResultModal({ timeRemaining, targetTimeI
             <p>
                 You stopped the timer with <strong>{formattedRemainingTime} seconds left.</strong>
             </p>
-            <form method="dialog" onSubmit={onReset}>
+            <form method="dialog" onSubmit={onReset} onClose={onReset}>
                 <button>Close</button>
             </form>
-        </dialog>
+        </dialog>,
+        document.getElementById("modal")
     )
 })
 export default ResultModal;
