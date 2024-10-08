@@ -1,8 +1,11 @@
 
 export default function Project({ title, description, dueDate }) {
-    return <>
-        <h1 className="text-3xl font-bold text-stone-600 mb-2">{title}</h1>
-        <h1>{description}</h1>
-        <h1>{dueDate.toDateString()}</h1>
-    </>
+    return <div className="w-5/6">
+        <div id="info">
+            <span className="float-right text-stone-600 hover:text-stone-800"><button>Delete</button></span>
+            <h1 className="text-3xl font-bold text-stone-600 mb-2">{title}</h1>
+            <p className="text-stone-600 mb-4">{dueDate.toDateString()}</p>
+            <h1 className="text-stone-800">{description}</h1>
+        </div>
+    </div>
 }
