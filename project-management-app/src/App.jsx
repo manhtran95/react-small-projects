@@ -12,21 +12,26 @@ const MODE = {
 }
 
 function App() {
-    const [mode, setMode] = useState(MODE.DEFAULT)
-    // const [mode, setMode] = useState(MODE.DETAIL)
+    // const [mode, setMode] = useState(MODE.DEFAULT)
+    // const [activeProjectIndex, setActiveProjectIndex] = useState(null)
+    const [mode, setMode] = useState(MODE.DETAIL)
+    const [activeProjectIndex, setActiveProjectIndex] = useState(0)
+
     const [projects, setProjects] = useState([{
         id: 1,
         title: 'Learning React',
         description: 'test1',
-        dueDate: new Date('2024-10-17')
+        dueDate: new Date('2024-10-17'),
+        tasks: []
     },
     {
         id: 2,
         title: 'Mastering React',
         description: 'test2',
-        dueDate: new Date('2024-10-18')
+        dueDate: new Date('2024-10-18'),
+        tasks: []
     }])
-    const [activeProjectIndex, setActiveProjectIndex] = useState(null)
+
 
     // mode default
     function setModeDefault() {
@@ -37,6 +42,18 @@ function App() {
     function selectProject(index) {
         setMode(MODE.DETAIL)
         setActiveProjectIndex(index)
+    }
+    // tasks
+    function handleAddTask(projectId, task) {
+        console.log(projectId, task)
+        setProjects(prevProjects => {
+            return prevProjects.map(project => {
+                if (project.id === projectId) {
+                    return { ...project, tasks: [...project.tasks, task] }
+                } else
+                    return project;
+            })
+        })
     }
 
     // mode create
@@ -55,7 +72,8 @@ function App() {
                 id: newUuid,
                 title: title,
                 description: description,
-                dueDate: new Date(dueDate)
+                dueDate: new Date(dueDate),
+                tasks: []
             }]
         })
         setMode(MODE.DETAIL)
@@ -68,12 +86,13 @@ function App() {
         setModeDefault()
     }
 
+
     return (
         <>
             <Menu titles={projects.map(p => p.title)} activeProjectIndex={activeProjectIndex} onClick={selectProject} openCreateProject={openCreateProject} />
             <div className="grid grid-cols-4 gap-4 place-content-center content-center mt-32">
                 <div></div>
-                <div className=' col-span-3'>
+                <div className='col-span-3'>
                     {(mode === MODE.DEFAULT) &&
                         <div className='grid justify-center'>
                             <img src="logo.png" alt="" className="w-16 h-16" />
@@ -83,7 +102,7 @@ function App() {
                         </div>
                     }
                     {(mode === MODE.CREATE) && <ProjectInput createProject={createProject} onCancel={cancelCreateProject} />}
-                    {(mode === MODE.DETAIL) && <Project {...projects[activeProjectIndex]} onDelete={handleDeleteProject} />}
+                    {(mode === MODE.DETAIL) && <Project {...projects[activeProjectIndex]} onDelete={handleDeleteProject} onAddTask={handleAddTask} />}
                 </div>
             </div>
         </>
