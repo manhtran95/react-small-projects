@@ -9,7 +9,7 @@ export default function ProjectInput({ onCancel, createProject }) {
         createProject(title.current.value, description.current.value, dueDate.current.value)
     }
 
-    return <div>
+    return <>
         <span class="flex justify-end">
             <button class="mr-4" onClick={onCancel}>Cancel</button>
             <button class="bg-gray-800 text-gray-200" onClick={handleCreateProject}>Save</button>
@@ -20,5 +20,5 @@ export default function ProjectInput({ onCancel, createProject }) {
         <input ref={description} type="text" class="h-12" />
         <h1>DUE DATE</h1>
         <input ref={dueDate} type="date" />
-    </div>
+    </>
 }
