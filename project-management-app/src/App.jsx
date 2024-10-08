@@ -28,16 +28,25 @@ function App() {
     }])
     const [activeProjectIndex, setActiveProjectIndex] = useState(null)
 
+    // mode default
+    function setModeDefault() {
+        setMode(MODE.DEFAULT)
+        setActiveProjectIndex(null)
+    }
+    // mode detail
     function selectProject(index) {
         setMode(MODE.DETAIL)
         setActiveProjectIndex(index)
     }
 
+    // mode create
     function openCreateProject() {
         setMode(MODE.CREATE)
         setActiveProjectIndex(null)
     }
-
+    function cancelCreateProject() {
+        setModeDefault()
+    }
     function createProject(title, description, dueDate) {
         const newUuid = uuid()
         setProjects(prevProjects => {
@@ -52,10 +61,11 @@ function App() {
         setMode(MODE.DETAIL)
         setActiveProjectIndex(projects.length)
     }
-
-    function cancelCreateProject() {
-        setMode(MODE.DEFAULT)
-        setActiveProjectIndex(null)
+    function handleDeleteProject(id) {
+        setProjects(prevProjects => {
+            return prevProjects.filter(p => p.id != id);
+        })
+        setModeDefault()
     }
 
     return (
@@ -73,7 +83,7 @@ function App() {
                         </div>
                     }
                     {(mode === MODE.CREATE) && <ProjectInput createProject={createProject} onCancel={cancelCreateProject} />}
-                    {(mode === MODE.DETAIL) && <Project {...projects[activeProjectIndex]} />}
+                    {(mode === MODE.DETAIL) && <Project {...projects[activeProjectIndex]} onDelete={handleDeleteProject} />}
                 </div>
             </div>
         </>
